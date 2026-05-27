@@ -80,6 +80,42 @@ jobs:
           echo "SITE_PACKAGES=$SITE_PACKAGES"
           echo "LD_LIBRARY_PATH=$SITE_PACKAGES:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
+      - name: 修复 MLC-LLM 环境
+        run: |
+          # 获取 site-packages 路径
+          SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
+    
+          # 尝试多个可能的库路径
+          MLC_AI_LIBS="$SITE_PACKAGES/mlc_ai/libs"
+          TVM_LIBS="$SITE_PACKAGES/tvm/lib"
+          TVM_LIBS_ALT="$SITE_PACKAGES/tvm/libs"
+    
+          # 检查哪个路径存在
+          if [ -d "$MLC_AI_LIBS" ]; then
+            LIB_PATH="$MLC_AI_LIBS"
+          elif [ -d "$TVM_LIBS" ]; then
+            LIB_PATH="$TVM_LIBS"
+          elif [ -d "$TVM_LIBS_ALT" ]; then
+            LIB_PATH="$TVM_LIBS_ALT"
+          else
+            echo "No TVM/MLC AI lib directory found!"
+            find $SITE_PACKAGES -type d -name "libs" 2>/dev/null
+            exit 1
+          fi
+    
+          # 设置 LD_LIBRARY_PATH
+          echo "Using library path:$LIB_PATH"
+          echo "LD_LIBRARY_PATH=$LIB_PATH:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+    
+      - name: 验证修复后的安装
+        run: |
+          # 重新加载环境变量
+          source$GITHUB_ENV
+          echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+    
+          # 测试导入
+          python -c "import mlc_llm; print('MLC-LLM imported successfully:', mlc_llm)"
+
       - name: 验证 MLC-LLM 安装
         run: |
           echo "LD_LIBRARY_PATH is:$LD_LIBRARY_PATH"
