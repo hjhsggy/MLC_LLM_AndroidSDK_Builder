@@ -72,7 +72,17 @@ jobs:
           sudo apt update
           sudo apt install git-lfs git
           python -m pip install pytest
-          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
+          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-ai-nightly-cpu
+          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu
+          
+          # 设置 LD_LIBRARY_PATH
+          SITE_PACKAGES=$(python -c "import site; print(site.getsitepackages()[0])")
+          echo "SITE_PACKAGES=$SITE_PACKAGES"
+          echo "LD_LIBRARY_PATH=$SITE_PACKAGES:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+      - name: 验证 MLC-LLM 安装
+        run: |
+          echo "LD_LIBRARY_PATH is:$LD_LIBRARY_PATH"
           python -c "import mlc_llm; print(mlc_llm)"
 
       - name: 安装 JDK
