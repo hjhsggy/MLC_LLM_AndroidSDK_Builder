@@ -65,7 +65,7 @@ jobs:
       - name: 安装 MLC-LLM 环境(Conda/Python)
         shell: bash -el {0}
         run: |
-          conda install -c conda-forge git-lfs -c conda-forge libstdcxx-ng
+          conda install -c conda-forge git-lfs
           python -m pip install pytest
           python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu
           python -m pip install --pre -U -f https://mlc.ai/wheels mlc-ai-nightly-cpu
