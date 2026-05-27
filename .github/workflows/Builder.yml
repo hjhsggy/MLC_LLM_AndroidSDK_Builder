@@ -110,7 +110,7 @@ jobs:
       - name: 验证修复后的安装
         run: |
           # 重新加载环境变量
-          source$GITHUB_ENV
+          source $GITHUB_ENV
           echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
     
           # 测试导入
