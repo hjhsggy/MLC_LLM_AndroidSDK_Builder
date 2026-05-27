@@ -55,23 +55,18 @@ jobs:
           sudo rm -rf /var/lib/apt/lists/*
           df -h
 
-      # 1. 替换为 Conda 环境初始化
       - name: 安装并配置 Conda 环境
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          python-version: '3.11' # 提示：MLC-LLM 对 3.10 或 3.11 的兼容性比最新的 3.13 更稳健
+          python-version: '3.13'
           activate-environment: mlc-env
 
-      # 2. 注意：后续所有涉及 python/pip/mlc_llm 的步骤都必须加上 shell: bash -el {0}
       - name: 安装 MLC-LLM 环境(Conda/Python)
         shell: bash -el {0}
         run: |
           conda install -c conda-forge git-lfs libstdcxx-ng
-          conda install -y pytest
-          python -m pip install --upgrade pip
-          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-ai-nightly-cpu
-          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu
+          conda install -y -c mlc-ai-nightly-cpu -c conda-forge mlc-llm-nightly-cpu pytest
 
       - name: 验证 MLC-LLM 安装
         shell: bash -el {0}
