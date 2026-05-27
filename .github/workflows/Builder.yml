@@ -71,7 +71,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install git-lfs git
-          python -m pip install --no-cache-dir --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
+          python -m pip install pytest
+          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
           python -c "import mlc_llm; print(mlc_llm)"
 
       - name: 安装 JDK
