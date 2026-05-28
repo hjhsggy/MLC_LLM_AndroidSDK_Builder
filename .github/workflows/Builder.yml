@@ -67,8 +67,7 @@ jobs:
         run: |
           conda install -c conda-forge git-lfs
           python -m pip install pytest
-          python -m pip install --pre -U -f https://mlc.ai/wheels "mlc-llm-nightly-cpu==0.19.*"
-          python -m pip install --pre -U -f https://mlc.ai/wheels "mlc-ai-nightly-cpu==0.19.*"
+          python -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-cpu mlc-ai-nightly-cpu
 
       - name: 验证 MLC-LLM 安装
         shell: bash -el {0}
